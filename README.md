@@ -14,7 +14,7 @@
 - LLVM >= 15.0. (repo: https://github.com/llvm/llvm-project);
 
 ## Установка
-- Утилита функционирует в среде LLVM, поэтому для работы необходимо [установить библиотеки и препроцессор инфрастуктуры LLVM](https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm) с флагами -DCMAKE_BUILD_TYPE=MinSizeRel -LLVM_BUILD_EXAMPLES=OFF -DLLVM_INSTALL_UTILS=OFF
+- Утилита функционирует в среде LLVM, поэтому для работы необходимо [установить библиотеки и препроцессор инфрастуктуры LLVM](https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm) с флагами -DCMAKE_BUILD_TYPE=MinSizeRel -DLLVM_BUILD_EXAMPLES=OFF -DLLVM_INSTALL_UTILS=OFF
 - Переместить папку qt-obfuscator в ../llvm-project/clang-tools-extra/
 - echo 'add_subdirectory(qt-obfuscator)' >> ../llvm-project/clang-tools-extra/CMakeLists.txt
 - cd ../llvm-project/build && ninja qt-obfuscator
