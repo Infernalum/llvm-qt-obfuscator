@@ -34,7 +34,7 @@ ApplicationWindow {
             ComboBox {
                 id: combobox
                 Layout.fillWidth: true
-                model: keygen.nQdmiM1_
+                model: keygen.types
                 currentIndex: 2
             }
         }
@@ -87,7 +87,7 @@ ApplicationWindow {
             Button {
                 id: generate
                 text: qsTr("&Generate")
-                onClicked: keygen.qL_()
+                onClicked: keygen.generateKey()
             }
             Button {
                 text: qsTr("&Quit")
@@ -109,12 +109,12 @@ ApplicationWindow {
         }
     }
 
-    QMLqvnHIy_ {
+    KeyGenerator {
         id: keygen
-        d0gk_: filename.text
-        wpwOldpnC_: passphrase.text
-        vkBGM_: combobox.currentText
-        onUCLk_: {
+        filename: filename.text
+        passphrase: passphrase.text
+        type: combobox.currentText
+        onKeyGenerated: {
             if (success) {
                 status.text = qsTr('<font color="green">Key generation succeeded.</font>')
             } else {

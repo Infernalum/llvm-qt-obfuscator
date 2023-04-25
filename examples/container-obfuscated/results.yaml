@@ -1,0 +1,288 @@
+---
+MainSourceFile:  ''
+Replacements:
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          24
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          35
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          94
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          105
+    Length:          11
+    ReplacementText: z5xwf99_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          188
+    Length:          8
+    ReplacementText: wpwOldpnC_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          283
+    Length:          11
+    ReplacementText: ozGQ9c_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          366
+    Length:          8
+    ReplacementText: qL_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          395
+    Length:          6
+    ReplacementText: ea_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          423
+    Length:          8
+    ReplacementText: qL_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          455
+    Length:          7
+    ReplacementText: adNzUAP_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          484
+    Length:          9
+    ReplacementText: nPeap0Ml_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          514
+    Length:          9
+    ReplacementText: lmrA3N1el7_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          546
+    Length:          8
+    ReplacementText: qL_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          587
+    Length:          8
+    ReplacementText: qL_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          615
+    Length:          13
+    ReplacementText: gs0_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          629
+    Length:          8
+    ReplacementText: qL_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          659
+    Length:          10
+    ReplacementText: wGsFgKIT_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          697
+    Length:          9
+    ReplacementText: nPeap0Ml_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          740
+    Length:          9
+    ReplacementText: nPeap0Ml_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          770
+    Length:          14
+    ReplacementText: nvzi6gx286_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.cpp'
+    Offset:          785
+    Length:          9
+    ReplacementText: nPeap0Ml_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          68
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          110
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          157
+    Length:          8
+    ReplacementText: wpwOldpnC_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          179
+    Length:          9
+    ReplacementText: uCLk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          660
+    Length:          11
+    ReplacementText: z5xwf99_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1105
+    Length:          11
+    ReplacementText: ozGQ9c_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1135
+    Length:          6
+    ReplacementText: ea_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1163
+    Length:          7
+    ReplacementText: adNzUAP_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1204
+    Length:          9
+    ReplacementText: lmrA3N1el7_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1218
+    Length:          6
+    ReplacementText: uVS_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1236
+    Length:          10
+    ReplacementText: wGsFgKIT_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1284
+    Length:          13
+    ReplacementText: gs0_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1320
+    Length:          14
+    ReplacementText: nvzi6gx286_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1371
+    Length:          8
+    ReplacementText: qL_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/container.h'
+    Offset:          1393
+    Length:          9
+    ReplacementText: nPeap0Ml_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          46
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          55
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          113
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          122
+    Length:          15
+    ReplacementText: mK_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          205
+    Length:          9
+    ReplacementText: lmrA3N1el7_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          217
+    Length:          7
+    ReplacementText: vkBGM_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          242
+    Length:          10
+    ReplacementText: wGsFgKIT_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          281
+    Length:          7
+    ReplacementText: vkBGM_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          326
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          335
+    Length:          15
+    ReplacementText: bnt_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          359
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          370
+    Length:          9
+    ReplacementText: ak_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          386
+    Length:          9
+    ReplacementText: d0gk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          407
+    Length:          9
+    ReplacementText: ak_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          418
+    Length:          8
+    ReplacementText: wpwOldpnC_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          431
+    Length:          16
+    ReplacementText: xK_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          453
+    Length:          9
+    ReplacementText: ak_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          464
+    Length:          9
+    ReplacementText: uCLk_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          504
+    Length:          16
+    ReplacementText: xK_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.cpp'
+    Offset:          534
+    Length:          9
+    ReplacementText: ak_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.h'
+    Offset:          63
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.h'
+    Offset:          124
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.h'
+    Offset:          186
+    Length:          15
+    ReplacementText: mK_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.h'
+    Offset:          280
+    Length:          15
+    ReplacementText: bnt_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.h'
+    Offset:          361
+    Length:          7
+    ReplacementText: vkBGM_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/factory.h'
+    Offset:          382
+    Length:          16
+    ReplacementText: xK_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          226
+    Length:          3
+    ReplacementText: nQdmiM1_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          270
+    Length:          6
+    ReplacementText: g57cdkvf_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          282
+    Length:          6
+    ReplacementText: g57cdkvf_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          341
+    Length:          6
+    ReplacementText: g57cdkvf_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          397
+    Length:          7
+    ReplacementText: leOjg_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          405
+    Length:          7
+    ReplacementText: qvnHIy_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          418
+    Length:          6
+    ReplacementText: g57cdkvf_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          471
+    Length:          7
+    ReplacementText: qvnHIy_
+  - FilePath:        '/home/infernal/Documents/NIER/llvm-qt-obfuscator/examples/container-obfuscated/main.cpp'
+    Offset:          493
+    Length:          3
+    ReplacementText: nQdmiM1_
+...

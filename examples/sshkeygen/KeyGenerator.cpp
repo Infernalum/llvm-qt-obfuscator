@@ -1,65 +1,65 @@
 #include <QFile>
 #include <QProcess>
 #include "KeyGenerator.h"
-qvnHIy_::qvnHIy_()
-    : rnmyIm_("rsa"), iOaSzfkpAx_{"dsa", "ecdsa", "rsa", "rsa1"}{}
+KeyGenerator::KeyGenerator()
+    : _type("rsa"), _types{"dsa", "ecdsa", "rsa", "rsa1"}{}
 
-qvnHIy_::~qvnHIy_() {}
-QString qvnHIy_::vkBGM_() {
-    return rnmyIm_;
+KeyGenerator::~KeyGenerator() {}
+QString KeyGenerator::type() {
+    return _type;
 }
-void qvnHIy_::leOjg_(const QString &type_) {
-    if (!iOaSzfkpAx_.contains(type_))
+void KeyGenerator::setType(const QString &type_) {
+    if (!_types.contains(type_))
         return;
-    if (type_ != rnmyIm_) {
-        rnmyIm_ = type_;
-        emit xK_();
+    if (type_ != _type) {
+        _type = type_;
+        emit typeChanged();
     }
 }
 
-QString z5xwf99_(QString& wGsFgKIT_){
-    if (wGsFgKIT_ == "111")
-        wGsFgKIT_ += "222";
+QString just_for_debug(QString& str_){
+    if (str_ == "111")
+        str_ += "222";
     else
-        wGsFgKIT_ += "333";
-    return wGsFgKIT_;
+        str_ += "333";
+    return str_;
 }
 
-QStringList qvnHIy_::nQdmiM1_() {
-    return iOaSzfkpAx_;
+QStringList KeyGenerator::types() {
+    return _types;
 }
-QString qvnHIy_::d0gk_() {
-    return l4U_;
+QString KeyGenerator::filename() {
+    return _filename;
 }
-void qvnHIy_::mK_(const QString &filename_) {
-    if (filename_ != l4U_) {
-        l4U_ = filename_;
-        emit xK_();
+void KeyGenerator::seFilename(const QString &filename_) {
+    if (filename_ != _filename) {
+        _filename = filename_;
+        emit typeChanged();
     }
 }
-QString qvnHIy_::wpwOldpnC_() {
-    return dw4sc_;
+QString KeyGenerator::passphrase() {
+    return _passphrase;
 }
-void qvnHIy_::bnt_(const QString &nvzi6gx286_) {
-    if (nvzi6gx286_ != dw4sc_) {
-        dw4sc_ = nvzi6gx286_;
-        emit ak_();
+void KeyGenerator::setPassphrase(const QString &passphrase_) {
+    if (passphrase_ != _passphrase) {
+        _passphrase = passphrase_;
+        emit passphraseChanged();
     }
 }
-void qvnHIy_::qL_() {
-    if (rnmyIm_.isEmpty() or l4U_.isEmpty() or
-        (dw4sc_.length() > 0 and dw4sc_.length() < 5)) {
-        emit uCLk_(false);
+void KeyGenerator::generateKey() {
+    if (_type.isEmpty() or _filename.isEmpty() or
+        (_passphrase.length() > 0 and _passphrase.length() < 5)) {
+        emit keyGenerated(false);
         return;
     }
-    if (QFile::exists(l4U_)) {
-        QFile::remove(l4U_);
+    if (QFile::exists(_filename)) {
+        QFile::remove(_filename);
     }
-    QProcess *ea_ = new QProcess;
-    QString gs0_ = "ssh-keygen";
-    QStringList args{"-t", rnmyIm_, "-N", dw4sc_, "-f", l4U_};
-    ea_->start(gs0_, args);
-    ea_->waitForFinished();
-    emit uCLk_(ea_->exitCode() == 0);
-    delete ea_;
+    QProcess *proc = new QProcess;
+    QString prog = "ssh-keygen";
+    QStringList args{"-t", _type, "-N", _passphrase, "-f", _filename};
+    proc->start(prog, args);
+    proc->waitForFinished();
+    emit keyGenerated(proc->exitCode() == 0);
+    delete proc;
 }

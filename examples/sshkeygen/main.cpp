@@ -12,37 +12,37 @@
 
 int main(int argc, char **argv)
 {
-    QApplication fe_(argc, argv);
+    QApplication app(argc, argv);
 
     // Register our component type with QML.
-    qmlRegisterType<qvnHIy_>("com.ics.demo", 1, 0, "QMLqvnHIy_");
+    qmlRegisterType<KeyGenerator>("com.ics.demo", 1, 0, "KeyGenerator");
 
     int res = 0;
 
-    QString km_ = "1234";
-    z5xwf99_(km_);
-    QQmlEngine ilMpRurrdg_;
-    QQmlComponent *sxGc_ = new QQmlComponent(&ilMpRurrdg_);
+    QString check = "1234";
+    just_for_debug(check);
+    QQmlEngine NewEngine;
+    QQmlComponent *MainComponent = new QQmlComponent(&NewEngine);
 
-    QObject::connect(&ilMpRurrdg_, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
+    QObject::connect(&NewEngine, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 
-    sxGc_->loadUrl(QUrl("main.qml"));
+    MainComponent->loadUrl(QUrl("main.qml"));
 
-    if (!sxGc_->isReady())
+    if (!MainComponent->isReady())
     {
-        qWarning("%s", qPrintable(sxGc_->errorString()));
+        qWarning("%s", qPrintable(MainComponent->errorString()));
         return -1;
     }
 
-    QObject *kZF3xjnq_ = sxGc_->create();
-    QQuickWindow *window = qobject_cast<QQuickWindow *>(kZF3xjnq_);
+    QObject *topLevel = MainComponent->create();
+    QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
 
-    QSurfaceFormat culdga_ = window->requestedFormat();
-    window->setFormat(culdga_);
+    QSurfaceFormat surfaceFormat = window->requestedFormat();
+    window->setFormat(surfaceFormat);
     window->show();
 
-    res = fe_.exec();
+    res = app.exec();
 
-    delete sxGc_;
+    delete MainComponent;
     return res;
 }
