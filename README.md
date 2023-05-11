@@ -6,19 +6,11 @@
 - Создание yaml файла-листинга соответствий старых и новых имен, их расположений.
 
 ## Требования
-
-- Unix OS (протестировано на Linux Mint 21.0 и Ubuntu >=20.04);
 - Qt Framework >= 5.12.0;
-- clang >= 15.0.0;
-- ninja (repo: https://github.com/ninja-build/ninja);
-- LLVM >= 15.0. (repo: https://github.com/llvm/llvm-project);
 
 ## Установка
-- Утилита функционирует в среде LLVM, поэтому для работы необходимо [установить библиотеки и препроцессор инфрастуктуры LLVM](https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm) с флагами -DCMAKE_BUILD_TYPE=MinSizeRel -DLLVM_BUILD_EXAMPLES=OFF -DLLVM_INSTALL_UTILS=OFF
-- Переместить папку qt-obfuscator в ../llvm-project/clang-tools-extra/
-- echo 'add_subdirectory(qt-obfuscator)' >> ../llvm-project/clang-tools-extra/CMakeLists.txt
-- cd ../llvm-project/build && ninja qt-obfuscator
-- ./bin/qt-obfuscator
+1) Прямая: скачивание утилиты (Releases); windows.zip / linux.zip
+2) Вручную: для Unix - Dockerfile, Windows - аналогично Dockerfile. Для установки системы сборки Ninja можно использовать Chocolatey: `choco install ninja`
 
 В дальнейшем будет доступен образ на основе Docker или Kubernetes, без необходимости полноценной установки LLVM.
 
