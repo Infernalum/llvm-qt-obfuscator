@@ -30,13 +30,13 @@ static void random_encryption(const string &name,
   size_t first{rand() % (allowedSize - 37)};
   newName.push_back((char)allowedSymbols[first]);
   for (auto i = 0; i < declSize - 1; ++i) {
-    size_t symbol{allowedSymbols[rand() % allowedSize]};
+    size_t symbol = allowedSymbols[rand() % allowedSize];
     newName.push_back(symbol);
   }
   // Дополняем еще случайными символами, если такое имя уже есть
   while (std::find(derivedNames.begin(), derivedNames.end(), newName) !=
          derivedNames.end()) {
-    size_t extra{allowedSymbols[rand() % allowedSize]};
+    size_t extra = allowedSymbols[rand() % allowedSize];
     newName.push_back(extra);
   }
   newName.push_back('_');
