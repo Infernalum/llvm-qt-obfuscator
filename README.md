@@ -9,10 +9,8 @@
 - Qt Framework >= 5.12.0;
 
 ## Установка
-1) Прямая: скачивание утилиты (Releases); windows.zip / linux.zip
-2) Вручную: для Unix - Dockerfile, Windows - аналогично Dockerfile. Для установки системы сборки Ninja можно использовать Chocolatey: `choco install ninja`
-
-В дальнейшем будет доступен образ на основе Docker или Kubernetes, без необходимости полноценной установки LLVM.
+1) Готовое: скачивание утилиты под необходимую платформу (Windows/Linux) из Releases; 
+2) Вручную: для Linux - Dockerfile (вес образа с билдом LLVM 3Гб), Windows - аналогично Dockerfile. Для установки системы сборки Ninja можно использовать Chocolatey: `choco install ninja`
 
 ## Использование
 
