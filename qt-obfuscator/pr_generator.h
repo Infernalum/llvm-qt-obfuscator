@@ -2,16 +2,14 @@
 #define PSGENERATOR_H_INCLUDED_
 
 #include "constants.h"
-#include "llvm/Support/CommandLine.h"
 
-using namespace std;
 using namespace Enums;
-using namespace llvm;
+using namespace RNGOpts;
 
 class PRGenerator {
 public:
-  static vector<string>
-  generate(const vector<string> &prevNames,
+  static std::vector<std::string>
+  generate(const std::vector<std::string> &prevNames,
            const OptEncryprtion method = OptEncryprtion::MD5);
 
   PRGenerator() = delete;

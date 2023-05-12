@@ -1,13 +1,10 @@
 #ifndef CONSTANTS_H_INCLUDED_
 #define CONSTANTS_H_INCLUDED_
 
-#include <iostream>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
-
-using namespace std;
 
 namespace Enums {
 
@@ -26,14 +23,15 @@ enum Stmts {
 };
 
 // Для промежуточной отладки
-static map<Stmts, string> StmtsMap{pair(VarDecl, "VarDecl"),
-                                   pair(FunctionDecl, "FunctionDecl"),
-                                   pair(MethodDecl, "MethodDecl"),
-                                   pair(RecordDecl, "RecordDecl"),
-                                   pair(ConstructorDecl, "ConstructorDecl"),
-                                   pair(ConversionDecl, "ConversionDecl"),
-                                   pair(DestructorDecl, "DestructorDecl"),
-                                   pair(FieldDecl, "FieldDecl")};
+static std::map<Stmts, std::string> StmtsMap{
+    std::pair(VarDecl, "VarDecl"),
+    std::pair(FunctionDecl, "FunctionDecl"),
+    std::pair(MethodDecl, "MethodDecl"),
+    std::pair(RecordDecl, "RecordDecl"),
+    std::pair(ConstructorDecl, "ConstructorDecl"),
+    std::pair(ConversionDecl, "ConversionDecl"),
+    std::pair(DestructorDecl, "DestructorDecl"),
+    std::pair(FieldDecl, "FieldDecl")};
 
 } // namespace Enums
 
@@ -41,12 +39,13 @@ static map<Stmts, string> StmtsMap{pair(VarDecl, "VarDecl"),
 // - тип объявления (переменная/класс/функция), second - полное имя (включая
 // разрешение видимости / принадлежность к объекту (классу/структуре/etc.))
 struct OwnPair {
-  pair<Enums::Stmts, string> m_pair;
+  std::pair<Enums::Stmts, std::string> m_pair;
 
-  OwnPair(Enums::Stmts type = Enums::Stmts::VarDecl, const string &name = "")
+  OwnPair(Enums::Stmts type = Enums::Stmts::VarDecl,
+          const std::string &name = "")
       : m_pair{type, name} {};
 
-  // Для использования в set
+  // Для использования в std::set
   bool operator<(const OwnPair &op) const {
     if (m_pair.first == op.m_pair.first) {
       if (m_pair.second < op.m_pair.second)
@@ -64,11 +63,12 @@ namespace frontendNS {
 
 namespace Opts {
 
-static const string generalInfo{"This is a simple qt-obfuscator based LLVM!\n"};
+static const std::string generalInfo{
+    "This is a simple qt-obfuscator based LLVM!\n"};
 
-static const string defaultQtPath{"/usr/include/x86_64-linux-gnu/qt5"};
+static const std::string defaultQtPath{"/usr/include/x86_64-linux-gnu/qt5"};
 
-static const string versionOverview{"Qt-obfuscator v.0.1"};
+static const std::string versionOverview{"Qt-obfuscator v.0.1"};
 
 } // namespace Opts
 
@@ -93,13 +93,13 @@ static const std::string allowedSymbols{
 
 // Список всех файлов проектов, включая заголовочные, чтобы препроцессор (и qml
 // парсер) понял, какие .h файлы можно модифицировать, а какие нет
-extern set<string> allowedLocs;
+extern std::set<std::string> allowedLocs;
 
 // Соответствующие имена исходных файлов для отбора найденных объявлений в
 // USRList
-extern set<string> filenames;
+extern std::set<std::string> filenames;
 
 // Найденные объявления в исходниках с их типами
-extern map<string, set<OwnPair>> namedList;
+extern std::map<std::string, std::set<OwnPair>> namedList;
 
 #endif /* CONSTANTS_H_INCLUDED_ */

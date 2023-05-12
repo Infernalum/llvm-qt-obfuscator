@@ -2,10 +2,9 @@
 #include "llvm/Support/MD5.h"
 #include <algorithm>
 
-using namespace RNGOpts;
-
-static void md5_encryption(const string &name, vector<string> &derivedNames) {
-  string newName{};
+static void md5_encryption(const std::string &name,
+                           std::vector<std::string> &derivedNames) {
+  std::string newName{};
   llvm::MD5 md5{};
 
   for (const auto &derived : derivedNames) {
@@ -15,13 +14,14 @@ static void md5_encryption(const string &name, vector<string> &derivedNames) {
   }
 }
 
-static void pjw_encryption(const string &name, vector<string> &derivedNames) {
-  string newName{};
+static void pjw_encryption(const std::string &name,
+                           std::vector<std::string> &derivedNames) {
+  std::string newName{};
 }
 
-static void random_encryption(const string &name,
-                              vector<string> &derivedNames) {
-  string newName{""};
+static void random_encryption(const std::string &name,
+                              std::vector<std::string> &derivedNames) {
+  std::string newName{""};
   // Выбираем размер
   size_t declSize{MIN_SIZE + rand() % (MAX_SIZE - MIN_SIZE + 1)};
   size_t allowedSize{allowedSymbols.size()};
@@ -29,7 +29,7 @@ static void random_encryption(const string &name,
   /* С учетом неиспользования верхнего регистра и цифр */
   size_t first{rand() % (allowedSize - 37)};
   newName.push_back((char)allowedSymbols[first]);
-  for (auto i = 0; i < declSize - 1; ++i) {
+  for (size_t i = 0; i < declSize - 1; ++i) {
     size_t symbol = allowedSymbols[rand() % allowedSize];
     newName.push_back(symbol);
   }
@@ -43,11 +43,12 @@ static void random_encryption(const string &name,
   derivedNames.push_back(newName);
 }
 
-vector<string> PRGenerator::generate(const vector<string> &prevNames,
-                                     const OptEncryprtion method) {
-  vector<string> newNames;
+std::vector<std::string>
+PRGenerator::generate(const std::vector<std::string> &prevNames,
+                      const OptEncryprtion method) {
+  std::vector<std::string> newNames;
   for (const auto &name : prevNames) {
-    string newName{};
+    std::string newName{};
     switch (method) {
     case OptEncryprtion::MD5:
       md5_encryption(name, newNames);

@@ -8,44 +8,43 @@
 #include <regex>
 #include <utility>
 
-using namespace std;
-
 // Разрешенные в объявлениях символы для проверки границ: чтобы не поменять
 // случайно, например, setFile, когда это объявление setFilename
-static const string allowedNameSymbols{
+static const std::string kAllowedNameSymbols{
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"};
 
 class QMLRefactor {
 
 public:
-  QMLRefactor(const set<string> &Locs,
-              const vector<pair<OwnPair, string>> &matchNames)
-      : sourceLocs_{Locs}, matchNames_{matchNames},
-        qmlFiles_{frontendNS::Frontend::qmlFiles}, qmlClasses_{},
-        qmlProperties_{} {};
+  QMLRefactor(const std::set<std::string> &locs,
+              const std::vector<std::pair<OwnPair, std::string>> &match_names)
+      : m_source_locs{locs}, m_match_names{match_names},
+        m_qml_files{frontendNS::Frontend::qmlFiles}, m_qml_classes{},
+        m_qml_properties{} {};
 
   void run();
 
 private:
-  bool refactor_qmls();
-  bool refactor_sources();
+  bool refactorQmls();
+  bool refactorSources();
 
-  string &find_q_property(const string &filename, const size_t &line,
-                          string &str);
-  string &find_qmlregistertype(const string &filename, const size_t &line,
-                               string &str);
+  std::string &findQProperties(const std::string &filename, const size_t &line,
+                               std::string &str);
+  std::string &findQmlRegisterTypes(const std::string &filename,
+                                    const size_t &line, std::string &str);
 
-  string rename_qmlClasses(const string &file) const;
-  bool rename_onSignals(const string &file) const;
-  bool rename_properties(const string &file, const string &qmlID) const;
-  bool rename_slots(const string &file, const string &qmlID) const;
+  std::string renameQMLClasses(const std::string &file) const;
+  bool renameOnSignals(const std::string &file) const;
+  bool renameProperties(const std::string &file,
+                        const std::string &qmlID) const;
+  bool renameSlots(const std::string &file, const std::string &qmlID) const;
 
-  const set<string> &sourceLocs_;
-  const vector<pair<OwnPair, string>> &matchNames_;
+  const std::set<std::string> &m_source_locs;
+  const std::vector<std::pair<OwnPair, std::string>> &m_match_names;
   // Инициализируется по флагу --qml
-  const vector<string> qmlFiles_;
-  vector<pair<string, string>> qmlClasses_;
-  set<pair<OwnPair, string>> qmlProperties_;
+  const std::vector<std::string> m_qml_files;
+  std::vector<std::pair<std::string, std::string>> m_qml_classes;
+  std::set<std::pair<OwnPair, std::string>> m_qml_properties;
 };
 
 #endif /* QML_REFACTOR_H_INCLUDED_ */

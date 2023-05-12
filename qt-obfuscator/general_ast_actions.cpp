@@ -1,23 +1,26 @@
 #include "general_ast_actions.h"
 
-set<string> allowedLocs;
-set<string> filenames;
-map<string, set<OwnPair>> namedList;
+std::set<std::string> allowedLocs;
+std::set<std::string> filenames;
+std::map<std::string, std::set<OwnPair>> namedList;
 
-StatementMatcher FindQMLMatcher::qml_matcher_ =
-    callExpr(callee(functionDecl(hasName("qmlRegisterType"))))
+clang::ast_matchers::StatementMatcher FindQMLMatcher::qml_matcher_ =
+    clang::ast_matchers::callExpr(
+        clang::ast_matchers::callee(clang::ast_matchers::functionDecl(
+            clang::ast_matchers::hasName("qmlRegisterType"))))
         .bind("qmlRegisterTypes");
 
-void FindQMLMatcher::run(const MatchFinder::MatchResult &Result) {
-  if (const auto FS = Result.Nodes.getNodeAs<Stmt>("qmlRegisterTypes"))
+void FindQMLMatcher::run(
+    const clang::ast_matchers::MatchFinder::MatchResult &Result) {
+  if (const auto FS = Result.Nodes.getNodeAs<clang::Stmt>("qmlRegisterTypes"))
     FS->dump();
 }
 
-bool GeneralASTVisitor::dataTraverseStmtPre(Stmt *S) { return true; }
+bool GeneralASTVisitor::dataTraverseStmtPre(clang::Stmt *S) { return true; }
 
-bool GeneralASTVisitor::dataTraverseStmtPost(Stmt *S) { return true; }
+bool GeneralASTVisitor::dataTraverseStmtPost(clang::Stmt *S) { return true; }
 
-bool GeneralASTVisitor::VisitFieldDecl(FieldDecl *Decl) {
+bool GeneralASTVisitor::VisitFieldDecl(clang::FieldDecl *Decl) {
   auto Loc{Decl->getLocation()};
   if (isValidLocation(Loc)) {
     addToList(Loc, Enums::Stmts::FieldDecl, Decl->getQualifiedNameAsString());
@@ -26,7 +29,7 @@ bool GeneralASTVisitor::VisitFieldDecl(FieldDecl *Decl) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitCXXRecordDecl(CXXRecordDecl *Decl) {
+bool GeneralASTVisitor::VisitCXXRecordDecl(clang::CXXRecordDecl *Decl) {
   auto Loc{Decl->getLocation()};
   if (isValidLocation(Loc)) {
     addToList(Loc, Enums::Stmts::RecordDecl, Decl->getQualifiedNameAsString());
@@ -35,7 +38,7 @@ bool GeneralASTVisitor::VisitCXXRecordDecl(CXXRecordDecl *Decl) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitVarDecl(VarDecl *Decl) {
+bool GeneralASTVisitor::VisitVarDecl(clang::VarDecl *Decl) {
   auto Loc{Decl->getLocation()};
   if (isValidLocation(Loc)) {
     addToList(Loc, Enums::Stmts::VarDecl, Decl->getQualifiedNameAsString());
@@ -44,16 +47,16 @@ bool GeneralASTVisitor::VisitVarDecl(VarDecl *Decl) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitCXXMethodDecl(CXXMethodDecl *Decl) {
+bool GeneralASTVisitor::VisitCXXMethodDecl(clang::CXXMethodDecl *Decl) {
   auto Loc{Decl->getLocation()};
   if (isValidLocation(Loc)) {
-    if (isa<CXXConstructorDecl>(*Decl))
+    if (clang::isa<clang::CXXConstructorDecl>(*Decl))
       addToList(Loc, Enums::Stmts::ConstructorDecl,
                 Decl->getQualifiedNameAsString());
-    else if (isa<CXXConversionDecl>(*Decl))
+    else if (clang::isa<clang::CXXConversionDecl>(*Decl))
       addToList(Loc, Enums::Stmts::ConversionDecl,
                 Decl->getQualifiedNameAsString());
-    else if (isa<CXXDestructorDecl>(*Decl))
+    else if (clang::isa<clang::CXXDestructorDecl>(*Decl))
       addToList(Loc, Enums::Stmts::DestructorDecl,
                 Decl->getQualifiedNameAsString());
     else
@@ -63,7 +66,7 @@ bool GeneralASTVisitor::VisitCXXMethodDecl(CXXMethodDecl *Decl) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitParmVarDecl(ParmVarDecl *Decl) {
+bool GeneralASTVisitor::VisitParmVarDecl(clang::ParmVarDecl *Decl) {
   auto Loc{Decl->getLocation()};
   if (isValidLocation(Loc)) {
     // auto body = Decl->getBody();
@@ -74,7 +77,7 @@ bool GeneralASTVisitor::VisitParmVarDecl(ParmVarDecl *Decl) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitCallExpr(CallExpr *Expr) {
+bool GeneralASTVisitor::VisitCallExpr(clang::CallExpr *Expr) {
   auto &SM = rewriter_.getSourceMgr();
   auto Decl = Expr->getDirectCallee();
   if ((Decl != nullptr) and (*Decl).getNameAsString() == "qmlRegisterType") {
@@ -87,8 +90,8 @@ bool GeneralASTVisitor::VisitCallExpr(CallExpr *Expr) {
       ++arg_num;
     for (int i = 0; i < arg_num; ++i)
       ++lastArg;
-    if (isa<clang::ImplicitCastExpr>(*lastArg)) {
-      auto string = cast<clang::ImplicitCastExpr>(*lastArg);
+    if (clang::isa<clang::ImplicitCastExpr>(*lastArg)) {
+      auto string = clang::cast<clang::ImplicitCastExpr>(*lastArg);
     }
   }
   // errs() << (cast<Stmt>(arg)).name
@@ -96,12 +99,12 @@ bool GeneralASTVisitor::VisitCallExpr(CallExpr *Expr) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitFunctionDecl(FunctionDecl *Decl) {
+bool GeneralASTVisitor::VisitFunctionDecl(clang::FunctionDecl *Decl) {
   auto Loc{Decl->getLocation()};
   if (isValidLocation(Loc)) {
     // auto body = Decl->getBody();
     // Делегируем обработку методов-членов класса на CXXMethodDecl
-    if (isa<clang::CXXMethodDecl>(*Decl))
+    if (clang::isa<clang::CXXMethodDecl>(*Decl))
       return true;
     addToList(Loc, Enums::Stmts::FunctionDecl,
               Decl->getQualifiedNameAsString());
@@ -109,7 +112,7 @@ bool GeneralASTVisitor::VisitFunctionDecl(FunctionDecl *Decl) {
   return true;
 }
 
-bool GeneralASTVisitor::VisitNamedDecl(NamedDecl *Decl) {
+bool GeneralASTVisitor::VisitNamedDecl(clang::NamedDecl *Decl) {
   auto location_{Decl->getLocation()};
   // Выводим только узлы из обрабатываемых источников
   if (isValidLocation(location_)) {
@@ -119,15 +122,17 @@ bool GeneralASTVisitor::VisitNamedDecl(NamedDecl *Decl) {
   return true;
 }
 
-string GeneralASTVisitor::getDeclLocation(const SourceLocation &Loc) const {
-  ostringstream OSS;
+std::string
+GeneralASTVisitor::getDeclLocation(const clang::SourceLocation &Loc) const {
+  std::ostringstream OSS;
   OSS << source_manager_.getFilename(Loc).str() << ":"
       << source_manager_.getSpellingLineNumber(Loc) << ":"
       << source_manager_.getSpellingColumnNumber(Loc);
   return OSS.str();
 }
 
-bool GeneralASTVisitor::isValidLocation(const SourceLocation &Loc) const {
+bool GeneralASTVisitor::isValidLocation(
+    const clang::SourceLocation &Loc) const {
   auto filename{source_manager_.getFilename(Loc).str()};
   for (auto &file : allowedLocs)
     if (filename == file)
@@ -135,15 +140,15 @@ bool GeneralASTVisitor::isValidLocation(const SourceLocation &Loc) const {
   return false;
 }
 
-bool GeneralASTVisitor::addToList(const SourceLocation &Loc,
+bool GeneralASTVisitor::addToList(const clang::SourceLocation &Loc,
                                   const Enums::Stmts type,
-                                  const string &NamedDecl) const {
+                                  const std::string &NamedDecl) const {
   auto filename{source_manager_.getFilename(Loc).str()};
   auto it{namedList.find(filename)};
   // Если это первое найденное объявление в текущем файле, то добавить новый
   // элемент в мапу
   if (it == namedList.end()) {
-    set<OwnPair> newEl{OwnPair{type, NamedDecl}};
+    std::set<OwnPair> newEl{OwnPair{type, NamedDecl}};
     namedList.insert(make_pair(filename, newEl));
   }
   // Иначе добавить объвяление в существующий элемент. Дубликаты учитываются
@@ -155,7 +160,7 @@ bool GeneralASTVisitor::addToList(const SourceLocation &Loc,
   return true;
 }
 
-bool GeneralASTConsumer::HandleTopLevelDecl(DeclGroupRef DR) {
+bool GeneralASTConsumer::HandleTopLevelDecl(clang::DeclGroupRef DR) {
   for (auto b = DR.begin(), e = DR.end(); b != e; ++b) {
     // Запускаем рекурсивный обход дерева
     visitor_.TraverseDecl(*b);
@@ -165,22 +170,24 @@ bool GeneralASTConsumer::HandleTopLevelDecl(DeclGroupRef DR) {
 };
 
 void GeneralASTAction::EndSourceFileAction() {
-  SourceManager &SM = rewriter_.getSourceMgr();
-  StringRef filename = SM.getFileEntryForID(SM.getMainFileID())->getName();
-  errs() << " ** EndSourceFileAction for: " << filename << " **\n";
+  clang::SourceManager &SM = rewriter_.getSourceMgr();
+  clang::StringRef filename =
+      SM.getFileEntryForID(SM.getMainFileID())->getName();
+  llvm::errs() << " ** EndSourceFileAction for: " << filename << " **\n";
 }
 
-unique_ptr<ASTConsumer>
-GeneralASTAction::CreateASTConsumer(CompilerInstance &CI, StringRef file) {
-  errs() << " ** Creating AST consumer for: " << file << " **\n";
+std::unique_ptr<clang::ASTConsumer>
+GeneralASTAction::CreateASTConsumer(clang::CompilerInstance &CI,
+                                    clang::StringRef file) {
+  llvm::errs() << " ** Creating AST consumer for: " << file << " **\n";
   rewriter_.setSourceMgr(CI.getSourceManager(), CI.getLangOpts());
-  auto p = make_unique<GeneralASTConsumer>(rewriter_);
+  auto p = std::make_unique<GeneralASTConsumer>(rewriter_);
   return p;
 }
 
-bool createLocs(const vector<string> &sources) {
-  FileSystemOptions options{"/"};
-  FileManager FM{options};
+bool createLocs(const std::vector<std::string> &sources) {
+  clang::FileSystemOptions options{"/"};
+  clang::FileManager FM{options};
   for (const auto &source : sources) {
     allowedLocs.insert(source);
     auto header = source.substr(0, source.size() - 4) + ".h";
@@ -193,7 +200,7 @@ bool createLocs(const vector<string> &sources) {
   return true;
 }
 
-bool createFilenames(const set<string> &Locs) {
+bool createFilenames(const std::set<std::string> &Locs) {
   for (const auto &Loc : Locs) {
     auto slash = Loc.find_last_of("/\\");
     filenames.insert(Loc.substr(slash + 1));

@@ -15,14 +15,6 @@ add_clang_tool(qt-obfuscator
 
 target_link_libraries(qt-obfuscator
     PRIVATE
-    clangAST
-    clangASTMatchers
-    clangBasic
-    clangFormat
-    clangFrontend
-    clangRewrite
-    clangSerialization
     clangTooling
-    clangToolingCore
     clangToolingRefactoring
 )

@@ -10,34 +10,31 @@
 #include "clang/Rewrite/Core/Rewriter.h"
 #include "clang/Tooling/Tooling.h"
 
+#include <iostream>
 #include <sstream>
 
-using namespace std;
-using namespace clang;
-using namespace llvm;
-using namespace clang::ast_matchers;
-using namespace clang::driver;
-using namespace clang::tooling;
-
-class FindQMLMatcher : public MatchFinder::MatchCallback {
+class FindQMLMatcher : public clang::ast_matchers::MatchFinder::MatchCallback {
 public:
   FindQMLMatcher(){};
-  virtual void run(const MatchFinder::MatchResult &Result) override;
+  virtual void
+  run(const clang::ast_matchers::MatchFinder::MatchResult &Result) override;
 
-  const StatementMatcher &getQmlMatcher() const { return qml_matcher_; };
+  const clang::ast_matchers::StatementMatcher &getQmlMatcher() const {
+    return qml_matcher_;
+  };
 
 private:
-  static StatementMatcher qml_matcher_;
+  static clang::ast_matchers::StatementMatcher qml_matcher_;
 };
 
-class GeneralASTVisitor : public RecursiveASTVisitor<GeneralASTVisitor> {
+class GeneralASTVisitor : public clang::RecursiveASTVisitor<GeneralASTVisitor> {
 public:
-  GeneralASTVisitor(Rewriter &R)
+  GeneralASTVisitor(clang::Rewriter &R)
       : rewriter_{R}, source_manager_{R.getSourceMgr()} {};
 
-  bool dataTraverseStmtPre(Stmt *S);
+  bool dataTraverseStmtPre(clang::Stmt *S);
 
-  bool dataTraverseStmtPost(Stmt *S);
+  bool dataTraverseStmtPost(clang::Stmt *S);
 
   // RecursiveASTVisitor выступает аналогом Наблюдателя: макрос Visit##(##
   // *Decl) позволяет переопределить этот метод для любого вида узла, и он будет
@@ -45,76 +42,76 @@ public:
   // данному типу. Причем, если находится, например, NamedDecl (потомок Decl),
   // то сначала будет вызываться VisitDecl, а потом уже VisitNamedDecl
 
-  bool VisitFieldDecl(FieldDecl *Decl);
+  bool VisitFieldDecl(clang::FieldDecl *Decl);
 
-  bool VisitCXXRecordDecl(CXXRecordDecl *Decl);
+  bool VisitCXXRecordDecl(clang::CXXRecordDecl *Decl);
 
-  bool VisitVarDecl(VarDecl *Decl);
+  bool VisitVarDecl(clang::VarDecl *Decl);
 
-  bool VisitCXXMethodDecl(CXXMethodDecl *Decl);
+  bool VisitCXXMethodDecl(clang::CXXMethodDecl *Decl);
 
-  bool VisitParmVarDecl(ParmVarDecl *Decl);
+  bool VisitParmVarDecl(clang::ParmVarDecl *Decl);
 
-  bool VisitCallExpr(CallExpr *Expr);
+  bool VisitCallExpr(clang::CallExpr *Expr);
 
-  bool VisitFunctionDecl(FunctionDecl *Decl);
+  bool VisitFunctionDecl(clang::FunctionDecl *Decl);
 
   // Так как нас интересуются только использование имен в коде, а NamedDecl
   // является базовым для остальных классов, то здесь можно вызвать dump(),
   // чтобы печатать только те узлы, что входят в обрабатываемые файлы
-  bool VisitNamedDecl(NamedDecl *Decl);
+  bool VisitNamedDecl(clang::NamedDecl *Decl);
 
 private:
   // Класс Rewriter позволяет сопоставлять узлы дерева (которое хранится во
   // время программы в ram) с их физическим расположением, позволяя тем самым
   // работать сразу с токенами файлов, а не AST
-  Rewriter &rewriter_;
-  SourceManager &source_manager_;
+  clang::Rewriter &rewriter_;
+  clang::SourceManager &source_manager_;
 
-  string getDeclLocation(const SourceLocation &Loc) const;
+  std::string getDeclLocation(const clang::SourceLocation &Loc) const;
 
   // Сверяется с SourceManager и проверяет, что узел является частью
   // обрабатываемых файлов
-  bool isValidLocation(const SourceLocation &Loc) const;
+  bool isValidLocation(const clang::SourceLocation &Loc) const;
 
   // Добавляет найденное объявление в глобальный список namedList
-  bool addToList(const SourceLocation &Loc, const Enums::Stmts type,
-                 const string &NamedDecl) const;
+  bool addToList(const clang::SourceLocation &Loc, const Enums::Stmts type,
+                 const std::string &NamedDecl) const;
 };
 
 // Реализация интерфейса для чтения AST-дерева, созданного препроцессором clang
-class GeneralASTConsumer : public ASTConsumer {
+class GeneralASTConsumer : public clang::ASTConsumer {
 public:
-  GeneralASTConsumer(Rewriter &R) : rewriter_{R}, visitor_{R} {};
+  GeneralASTConsumer(clang::Rewriter &R) : rewriter_{R}, visitor_{R} {};
 
   // Переопределение метода, который будет вызываться каждый раз при обработке
   // верхнего узла дерева (т.е. при инициализации дерева для каждого файла)
-  bool HandleTopLevelDecl(DeclGroupRef DR) final;
+  bool HandleTopLevelDecl(clang::DeclGroupRef DR) final;
 
-  void PrintStats() final { cout << "just for debug\n"; }
+  void PrintStats() final { std::cout << "just for debug\n"; }
 
 private:
-  Rewriter &rewriter_;
+  clang::Rewriter &rewriter_;
   GeneralASTVisitor visitor_;
 };
 
 // Для каждого указанного исходника создается свое представление AST в памяти
-class GeneralASTAction : public ASTFrontendAction {
+class GeneralASTAction : public clang::ASTFrontendAction {
 public:
   GeneralASTAction(){};
 
   virtual void EndSourceFileAction() final;
 
   // Чисто виртуальный метод для создания указателя на созданное дерево
-  virtual unique_ptr<ASTConsumer> CreateASTConsumer(CompilerInstance &CI,
-                                                    StringRef file) final;
+  virtual std::unique_ptr<clang::ASTConsumer>
+  CreateASTConsumer(clang::CompilerInstance &CI, llvm::StringRef file) final;
 
 private:
-  Rewriter rewriter_;
+  clang::Rewriter rewriter_;
 };
 
-bool createLocs(const vector<string> &sources);
+bool createLocs(const std::vector<std::string> &sources);
 
-bool createFilenames(const set<string> &Locs);
+bool createFilenames(const std::set<std::string> &Locs);
 
 #endif /* GENERAL_AST_ACTIONS_H_INCLUDED_ */

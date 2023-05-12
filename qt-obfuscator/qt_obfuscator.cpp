@@ -4,46 +4,43 @@
 
 #include "clang/Tooling/Refactoring/Rename/RenamingAction.h"
 #include "clang/Tooling/Refactoring/Rename/USRFindingAction.h"
-#include "llvm/IR/Module.h"
-#include "llvm/Support/RandomNumberGenerator.h"
-
-using namespace frontendNS;
-using namespace clang;
-using namespace llvm;
 
 int main(int argc, const char **argv) {
 
-  auto expectedParser = Frontend::create(argc, argv, Opts::generalInfo);
+  auto expectedParser =
+      frontendNS::Frontend::create(argc, argv, frontendNS::Opts::generalInfo);
 
   if (auto E = expectedParser.takeError()) {
-    errs() << E << '\n';
+    llvm::errs() << E << '\n';
     return 1;
   }
 
   // Инициализируем ГПСЧ
-  if (!Frontend::RNGSeed) {
+  if (!frontendNS::Frontend::RNGSeed) {
     srand(time(nullptr));
-    Frontend::RNGSeed = rand();
+    frontendNS::Frontend::RNGSeed = rand();
   } else
-    srand(Frontend::RNGSeed);
-  errs() << "Generation seed is: " << Frontend::RNGSeed << '\n';
+    srand(frontendNS::Frontend::RNGSeed);
+  llvm::errs() << "Generation seed is: " << frontendNS::Frontend::RNGSeed
+               << '\n';
 
   // Создаем начальную утилиту с настройками препроцессора
   auto &options{expectedParser.get()};
   auto &sources{options.getSourcePathList()};
-  tooling::RefactoringTool Tool(options.getCompilations(), sources);
+  clang::tooling::RefactoringTool Tool(options.getCompilations(), sources);
   size_t rc{0};
   createLocs(sources);
   createFilenames(allowedLocs);
 
   // Формиируем в утилите все AST деревья и ищем все объявления
-  rc = Tool.run(tooling::newFrontendActionFactory<GeneralASTAction>().get());
+  rc = Tool.run(
+      clang::tooling::newFrontendActionFactory<GeneralASTAction>().get());
   if (rc)
     return rc;
 
   // Удаляем из списка инициализаторы класса
   // (конструкторы/операторы/деструкторы)
-  set<OwnPair> uniqueNames{};
+  std::set<OwnPair> uniqueNames{};
   for (const auto &file : namedList) {
     auto &list{file.second};
     for (auto &name : list) {
@@ -60,26 +57,27 @@ int main(int argc, const char **argv) {
 
   // For debug
   for (const auto &name : uniqueNames)
-    errs() << StmtsMap[name.m_pair.first] << " - " << name.m_pair.second
-           << '\n';
+    llvm::errs() << StmtsMap[name.m_pair.first] << " - " << name.m_pair.second
+                 << '\n';
 
   // Ищем элементы qml
   FindQMLMatcher matcher;
-  MatchFinder finder;
+  clang::ast_matchers::MatchFinder finder;
   finder.addMatcher(matcher.getQmlMatcher(), &matcher);
-  Tool.run(tooling::newFrontendActionFactory(&finder).get());
+  Tool.run(clang::tooling::newFrontendActionFactory(&finder).get());
 
   // Формируем структуры для USRFindingAction
-  static cl::list<string> qualifiedNames("");
-  cl::list<unsigned> symboloffsets("");
+  static llvm::cl::list<std::string> qualifiedNames("");
+  llvm::cl::list<unsigned> symboloffsets("");
 
   for (const auto &name : uniqueNames)
     qualifiedNames.push_back(name.m_pair.second);
 
   // Запускаем для каждого USRFindingAction и RanaimingAction (последний
   // перезапишет файлы)
-  tooling::USRFindingAction findingAction(symboloffsets, qualifiedNames, true);
-  Tool.run(tooling::newFrontendActionFactory(&findingAction).get());
+  clang::tooling::USRFindingAction findingAction(symboloffsets, qualifiedNames,
+                                                 true);
+  Tool.run(clang::tooling::newFrontendActionFactory(&findingAction).get());
 
   if (findingAction.errorOccurred()) {
     return 1;
@@ -88,20 +86,18 @@ int main(int argc, const char **argv) {
   const auto &USRList{findingAction.getUSRList()};
   const auto &PrevNames{findingAction.getUSRSpellings()};
 
-  errs() << "\tUSRList:\n\n";
+  llvm::errs() << "\tUSRList:\n\n";
   for (const auto &name : USRList) {
     for (const auto &part : name)
-      errs() << part << "; ";
-    errs() << '\n';
+      llvm::errs() << part << "; ";
+    llvm::errs() << '\n';
   }
 
-  errs() << "\tPrevNames:\n\n";
-  for (const auto &name : PrevNames) {
-    errs() << name << ";\n";
-  }
-
-  vector<vector<string>> revisedUSRList{};
-  vector<string> revisedPrevNames{};
+  llvm::errs() << "\tPrevNames:\n\n";
+  for (const auto &name : PrevNames)
+    llvm::errs() << name << ";\n";
+  std::vector<std::vector<std::string>> revisedUSRList{};
+  std::vector<std::string> revisedPrevNames{};
 
   // Сохраняем для RenaimingAction только уникальные идентификаторы
   // Индексация нужна, чтобы вместе с USR сразу модифицировать PrevNames
@@ -141,34 +137,34 @@ int main(int argc, const char **argv) {
     }
   }
 
-  errs() << "\trevisedUSRList, size: " << revisedUSRList.size() << '\n';
+  llvm::errs() << "\trevisedUSRList, size: " << revisedUSRList.size() << '\n';
   for (const auto &name : revisedUSRList) {
     for (const auto &part : name)
-      errs() << part << "; ";
-    errs() << '\n';
+      llvm::errs() << part << "; ";
+    llvm::errs() << '\n';
   }
 
-  errs() << "\trevisedPrevNames. size: " << revisedPrevNames.size() << '\n';
-  for (const auto &name : revisedPrevNames) {
-    errs() << name << ";\n";
-  }
+  llvm::errs() << "\trevisedPrevNames. size: " << revisedPrevNames.size()
+               << '\n';
+  for (const auto &name : revisedPrevNames)
+    llvm::errs() << name << ";\n";
 
-  std::vector<std::string> newNames =
-      PRGenerator::generate(revisedPrevNames, Frontend::encryptionMode);
+  std::vector<std::string> newNames = PRGenerator::generate(
+      revisedPrevNames, frontendNS::Frontend::encryptionMode);
 
   // Порядок: <Stmts, oldName> - newName
-  vector<pair<OwnPair, string>> matchNames;
+  std::vector<std::pair<OwnPair, std::string>> matchNames;
 
   // Формируем список для QmlRefactor
   for (auto i = 0; i < revisedPrevNames.size(); ++i) {
     auto &revisedName{revisedPrevNames[i]};
     const auto &USRList{revisedUSRList[i]};
-    pair<OwnPair, string> el;
+    std::pair<OwnPair, std::string> el;
     el.second = newNames[i];
     for (const auto &originPair : uniqueNames) {
       auto originName{originPair.m_pair.second};
       auto colon{originName.find_last_of(":")};
-      if (colon != string::npos) {
+      if (colon != std::string::npos) {
         originName = originName.substr(colon + 1);
       }
       if (revisedName == originName) {
@@ -183,34 +179,36 @@ int main(int argc, const char **argv) {
 
   // По собранным USR старых имен и сгенерированным именам переименовываем все
   // узлы
-  tooling::RenamingAction RenameAction(
+  clang::tooling::RenamingAction RenameAction(
       newNames, revisedPrevNames, revisedUSRList, Tool.getReplacements(), true);
-  unique_ptr<tooling::FrontendActionFactory> Factory =
-      tooling::newFrontendActionFactory(&RenameAction);
+  std::unique_ptr<clang::tooling::FrontendActionFactory> Factory =
+      clang::tooling::newFrontendActionFactory(&RenameAction);
 
   int ExitCode;
 
   ExitCode = Tool.runAndSave(Factory.get());
 
-  errs() << allowedLocs.size() << '\n';
+  llvm::errs() << allowedLocs.size() << '\n';
 
   // Переименовываем qml элементы
   QMLRefactor qmlrefactor(allowedLocs, matchNames);
   qmlrefactor.run();
 
-  // Сохраняем изменения в yaml, если задавали параметр exportDixes
-  if (!Frontend::exportFixes.empty()) {
-    error_code EC;
-    raw_fd_ostream OS(Frontend::exportFixes, EC, sys::fs::OF_None);
-    tooling::TranslationUnitReplacements TUR;
+  // Сохраняем изменения в yaml, если задавали параметр exportFixes
+  if (!frontendNS::Frontend::exportFixes.empty()) {
+    std::error_code EC;
+    llvm::raw_fd_ostream OS(frontendNS::Frontend::exportFixes, EC,
+                            llvm::sys::fs::OF_None);
+    clang::tooling::TranslationUnitReplacements TUR;
     const auto &fileToReplacements{Tool.getReplacements()};
     for (const auto &Entry : fileToReplacements)
       TUR.Replacements.insert(TUR.Replacements.end(), Entry.second.begin(),
                               Entry.second.end());
-    yaml::Output YAML(OS);
+    llvm::yaml::Output YAML(OS);
     YAML << TUR;
     OS.close();
-    errs() << "Replacements have been successfully exported to YAML file.\n";
+    llvm::errs()
+        << "Replacements have been successfully exported to YAML file.\n";
   }
 
   return ExitCode;
