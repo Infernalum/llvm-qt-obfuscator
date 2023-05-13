@@ -10,7 +10,7 @@
 
 ## Установка
 1) Готовое: скачивание утилиты под необходимую платформу (Windows/Linux) из Releases; 
-2) Вручную: для Linux - Dockerfile (вес образа с билдом LLVM 3Гб), Windows - аналогично Dockerfile. Для установки системы сборки Ninja можно использовать Chocolatey: `choco install ninja`
+2) Вручную: для Linux - Dockerfile (вес образа с билдом LLVM 3Гб), Windows - аналогично Dockerfile (возможно, потребуется параметр -DLLVM_HOST_TRIPLE=x86_64 при сборке LLVM). Для установки системы сборки Ninja можно использовать Chocolatey: `choco install ninja`
 
 ## Использование
 
