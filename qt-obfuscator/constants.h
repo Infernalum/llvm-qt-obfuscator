@@ -23,7 +23,7 @@ enum Stmts {
 };
 
 // Для промежуточной отладки
-static std::map<Stmts, std::string> StmtsMap{
+static std::map<Stmts, std::string> kStmtsMap{
     std::pair(VarDecl, "VarDecl"),
     std::pair(FunctionDecl, "FunctionDecl"),
     std::pair(MethodDecl, "MethodDecl"),
@@ -39,23 +39,18 @@ static std::map<Stmts, std::string> StmtsMap{
 // - тип объявления (переменная/класс/функция), second - полное имя (включая
 // разрешение видимости / принадлежность к объекту (классу/структуре/etc.))
 struct OwnPair {
-  std::pair<Enums::Stmts, std::string> m_pair;
+  std::pair<Enums::Stmts, std::string> pair_;
 
   OwnPair(Enums::Stmts type = Enums::Stmts::VarDecl,
           const std::string &name = "")
-      : m_pair{type, name} {};
+      : pair_{type, name} {};
 
   // Для использования в std::set
   bool operator<(const OwnPair &op) const {
-    if (m_pair.first == op.m_pair.first) {
-      if (m_pair.second < op.m_pair.second)
-        return true;
-      else
-        return false;
-    } else if (m_pair.first < op.m_pair.first)
-      return true;
-    else
-      return false;
+    return pair_.first == op.pair_.first
+               ? pair_.second < op.pair_.second ? true : false
+           : pair_.first < op.pair_.first ? true
+                                          : false;
   };
 };
 
@@ -63,12 +58,12 @@ namespace frontendNS {
 
 namespace Opts {
 
-static const std::string generalInfo{
+static const std::string kGeneralInfo{
     "This is a simple qt-obfuscator based LLVM!\n"};
 
-static const std::string defaultQtPath{"/usr/include/x86_64-linux-gnu/qt5"};
+static const std::string kDefaultQtPath{"/usr/include/x86_64-linux-gnu/qt5"};
 
-static const std::string versionOverview{"Qt-obfuscator v.0.1"};
+static const std::string kVersionOverview{"Qt-obfuscator v.0.1"};
 
 } // namespace Opts
 
@@ -83,7 +78,7 @@ static const size_t MAX_SIZE = 10;
 
 // Для проверки, что найденное в файле имя не явлется частью большего имени,
 // e.g. setFile это часть setFilename
-static const std::string allowedSymbols{
+static const std::string kAllowedSymbols{
     "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV"
     "WXYZ0123456789"};
 

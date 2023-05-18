@@ -7,9 +7,9 @@
 
 // Для тривиальной записи изменений в yaml-файл
 struct RenameAllInfo {
-  size_t m_offset;
-  std::string m_qualified_name;
-  std::string m_new_name;
+  size_t offset_;
+  std::string qualified_name_;
+  std::string new_name_;
 };
 LLVM_YAML_IS_SEQUENCE_VECTOR(RenameAllInfo)
 
@@ -18,9 +18,9 @@ namespace yaml {
 
 template <> struct MappingTraits<RenameAllInfo> {
   static void mapping(IO &IO, RenameAllInfo &Info) {
-    IO.mapOptional("Offset", Info.m_offset);
-    IO.mapOptional("QualifiedName", Info.m_qualified_name);
-    IO.mapOptional("NewName", Info.m_new_name);
+    IO.mapOptional("Offset", Info.offset_);
+    IO.mapOptional("QualifiedName", Info.qualified_name_);
+    IO.mapOptional("NewName", Info.new_name_);
   }
 };
 
@@ -33,23 +33,23 @@ namespace frontendNS {
 // препроцессору (like --extra-arg=) и следит за валидностью параметров
 class Frontend {
 public:
-  static llvm::cl::OptionCategory toolCategory;
+  static llvm::cl::OptionCategory tool_category_;
 
-  static llvm::cl::opt<std::string> qtPath;
-  static llvm::cl::alias qtPathAlias;
+  static llvm::cl::opt<std::string> qtpath_;
+  static llvm::cl::alias qtpath_alias_;
 
-  static llvm::cl::list<std::string> qmlFiles;
+  static llvm::cl::list<std::string> qmlfiles_;
 
-  static llvm::cl::opt<bool> inplace;
-  static llvm::cl::alias inplaceAlias;
+  static llvm::cl::opt<bool> inplace_;
+  static llvm::cl::alias inplace_alias_;
 
-  static llvm::cl::opt<std::string> exportFixes;
-  static llvm::cl::alias exportFixesAlias;
+  static llvm::cl::opt<std::string> export_fixes_;
+  static llvm::cl::alias export_fixes_alias_;
 
-  static llvm::cl::opt<Enums::OptEncryprtion> encryptionMode;
-  static llvm::cl::alias encryptionModeAlias;
+  static llvm::cl::opt<Enums::OptEncryprtion> encryption_mode_;
+  static llvm::cl::alias encryption_mode_alias_;
 
-  static llvm::cl::opt<int> RNGSeed;
+  static llvm::cl::opt<int> rng_seed_;
 
   static llvm::Expected<clang::tooling::CommonOptionsParser>
   create(int argc, const char **argv, llvm::StringRef overwiew = "");

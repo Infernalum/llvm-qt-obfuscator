@@ -12,7 +12,7 @@ void QMLRefactor::run() {
 };
 
 bool QMLRefactor::refactorSources() {
-  for (const auto &file : m_source_locs) {
+  for (const auto &file : source_locs_) {
     std::ifstream opened{file};
     std::string str, buffer;
     size_t line{0};
@@ -39,30 +39,30 @@ std::string &QMLRefactor::findQProperties(const std::string &filename,
                  << ":" << detect << '\n';
     // Заменяем все вхождения переименованных идентификаторов на их новые
     // имена
-    for (const auto &el : m_match_names) {
-      const auto &stmt{el.first.m_pair.first};
-      const auto &old_mame{el.first.m_pair.second};
+    for (const auto &el : match_names_) {
+      const auto &stmt{el.first.pair_.first};
+      const auto &old_mame{el.first.pair_.second};
       const auto &new_name{el.second};
       // Проверяем, что найденное совпадение это полное имя идентификатора,  а
       // не часть большего имени
-      bool isBorderValid;
+      bool is_border_valid;
       size_t p_str{detect};
       do {
-        isBorderValid = true;
+        is_border_valid = true;
         p_str = str.find(old_mame, p_str);
         // Если хотя бы одна граница является допустимым для использования в
         // объявлениях символом, то просто пропускаем совпадение
         if (p_str != std::string::npos) {
           if ((p_str != 0) and (kAllowedNameSymbols.find_first_of(
                                     str[p_str - 1]) != std::string::npos))
-            isBorderValid = false;
+            is_border_valid = false;
           if ((p_str != str.size() - 1) and
               (kAllowedNameSymbols.find_first_of(
                    str[p_str + old_mame.size()]) != std::string::npos))
-            isBorderValid = false;
-          if (isBorderValid) {
+            is_border_valid = false;
+          if (is_border_valid) {
             str.replace(p_str, old_mame.size(), new_name);
-            m_qml_properties.insert(el);
+            qml_properties_.insert(el);
           }
           p_str += old_mame.size();
         }
@@ -81,17 +81,17 @@ std::string &QMLRefactor::findQmlRegisterTypes(const std::string &filename,
                  << ':' << detect << '\n';
     // Находим последний аргумент функции: во всех перегрузках имя класса
     // идет последним
-    auto e{str.find_first_of(';', detect) - 1};
-    auto b{str.find_last_of(',', e) + 1};
-    auto className{str.substr(b, e - b)};
+    auto end{str.find_first_of(';', detect) - 1};
+    auto begin{str.find_last_of(',', end) + 1};
+    auto className{str.substr(begin, end - begin)};
     className.erase(std::remove(className.begin(), className.end(), ' '),
                     className.end());
     className.erase(std::remove(className.begin(), className.end(), '"'),
                     className.end());
 
     std::pair<std::string, std::string> pair(className, "");
-    for (const auto &el : m_match_names) {
-      if (className == el.first.m_pair.second) {
+    for (const auto &el : match_names_) {
+      if (className == el.first.pair_.second) {
         pair.second = el.second;
         break;
       }
@@ -100,14 +100,14 @@ std::string &QMLRefactor::findQmlRegisterTypes(const std::string &filename,
     llvm::errs() << "Renaming " << pair.first << " to " << pair.second
                  << " ...\n";
     str = std::regex_replace(str, std::regex(pair.first), pair.second);
-    m_qml_classes.push_back(pair);
+    qml_classes_.push_back(pair);
     llvm::errs() << "Done.\n";
   }
   return str;
 };
 
 bool QMLRefactor::refactorQmls() {
-  for (const auto &file : m_qml_files) {
+  for (const auto &file : qml_files_) {
     auto qmlID = renameQMLClasses(file);
     if (qmlID.size()) {
       renameOnSignals(file);
@@ -122,22 +122,22 @@ std::string QMLRefactor::renameQMLClasses(const std::string &file) const {
   std::string res;
   std::ifstream opened(file);
   std::string buffer, str;
-  bool isDeclared{false};
+  bool is_declared{false};
   size_t id_loc{std::string::npos};
   while (getline(opened, str)) {
-    if (isDeclared) {
+    if (is_declared) {
       id_loc = str.find("id:");
       if (id_loc != std::string::npos) {
         res = str.substr(id_loc + 4, 6);
-        isDeclared = false;
+        is_declared = false;
       }
     }
-    for (const auto &qmlclass : m_qml_classes) {
+    for (const auto &qmlclass : qml_classes_) {
       size_t p_str{0};
       p_str = str.find(qmlclass.first);
       if (p_str != std::string::npos) {
         str.replace(p_str, qmlclass.first.size(), qmlclass.second);
-        isDeclared = true;
+        is_declared = true;
       }
     }
     buffer += (str + '\n');
@@ -153,9 +153,9 @@ bool QMLRefactor::renameOnSignals(const std::string &file) const {
   std::ifstream opened(file);
   std::string buffer, str;
   while (getline(opened, str)) {
-    for (const auto &el : m_match_names) {
+    for (const auto &el : match_names_) {
       // !!!!!!!!!!!!!!!!!!!
-      std::string signal{"on" + el.first.m_pair.second};
+      std::string signal{"on" + el.first.pair_.second};
       signal[2] -= 32;
       auto p_str = str.find(signal);
       if (p_str != std::string::npos) {
@@ -179,21 +179,21 @@ bool QMLRefactor::renameProperties(const std::string &file,
                                    const std::string &qmlID) const {
   std::ifstream opened(file);
   std::string buffer, str;
-  auto isClass{false};
+  auto is_class{false};
   // for (const auto &el : _qmlProperties)
   //   errs() << el.first.m_pair.second << " - " << el.second << '\n';
   while (getline(opened, str)) {
     if (str.find("id: " + qmlID) != std::string::npos) {
       llvm::errs() << str << '\n';
-      isClass = true;
+      is_class = true;
     }
 
-    if (isClass)
-      for (const auto &el : m_qml_properties) {
-        auto p_str = str.find(el.first.m_pair.second + ':');
+    if (is_class)
+      for (const auto &el : qml_properties_) {
+        auto p_str = str.find(el.first.pair_.second + ':');
         if (p_str != std::string::npos) {
           llvm::errs() << str << '\n';
-          str.replace(p_str, el.first.m_pair.second.size(), el.second);
+          str.replace(p_str, el.first.pair_.second.size(), el.second);
           llvm::errs() << str << '\n';
         }
       }
@@ -212,29 +212,29 @@ bool QMLRefactor::renameSlots(const std::string &file,
                               const std::string &qmlID) const {
   std::ifstream opened(file);
   std::string buffer, str;
-  auto callPattern{qmlID + "."};
+  auto call_pattern{qmlID + "."};
   // for (const auto &el : _qmlProperties)
   //   errs() << el.first.m_pair.second << " - " << el.second << '\n';
   size_t line{0};
   while (getline(opened, str)) {
     ++line;
-    for (const auto &el : m_match_names) {
-      auto fullName = callPattern + el.first.m_pair.second;
-      auto p_str = str.find(fullName);
+    for (const auto &el : match_names_) {
+      auto full_name = call_pattern + el.first.pair_.second;
+      auto p_str = str.find(full_name);
       if (p_str != std::string::npos) {
-        bool isBorderValid{true};
+        bool is_border_valid{true};
         // Если хотя бы одна граница является допустимым для использования в
         // объявлениях символом, то просто пропускаем совпадение
         if ((p_str != 0) and (kAllowedNameSymbols.find_first_of(
                                   str[p_str - 1]) != std::string::npos))
-          isBorderValid = false;
+          is_border_valid = false;
         if ((p_str != str.size() - 1) and
-            (kAllowedNameSymbols.find_first_of(str[p_str + fullName.size()]) !=
+            (kAllowedNameSymbols.find_first_of(str[p_str + full_name.size()]) !=
              std::string::npos))
-          isBorderValid = false;
-        if (isBorderValid) {
+          is_border_valid = false;
+        if (is_border_valid) {
           llvm::errs() << str << '\n';
-          str.replace(p_str, fullName.size(), callPattern + el.second);
+          str.replace(p_str, full_name.size(), call_pattern + el.second);
           llvm::errs() << str << '\n';
         }
       }

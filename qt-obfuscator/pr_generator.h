@@ -9,7 +9,7 @@ using namespace RNGOpts;
 class PRGenerator {
 public:
   static std::vector<std::string>
-  generate(const std::vector<std::string> &prevNames,
+  generate(const std::vector<std::string> &prev_names,
            const OptEncryprtion method = OptEncryprtion::MD5);
 
   PRGenerator() = delete;

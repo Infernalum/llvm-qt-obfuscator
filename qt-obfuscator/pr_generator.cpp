@@ -3,62 +3,62 @@
 #include <algorithm>
 
 static void md5_encryption(const std::string &name,
-                           std::vector<std::string> &derivedNames) {
-  std::string newName{};
+                           std::vector<std::string> &derived_names) {
+  std::string new_name{""};
   llvm::MD5 md5{};
 
-  for (const auto &derived : derivedNames) {
-    if (derived == newName) {
+  for (const auto &derived : derived_names) {
+    if (derived == new_name) {
       char extra = rand();
     }
   }
 }
 
 static void pjw_encryption(const std::string &name,
-                           std::vector<std::string> &derivedNames) {
-  std::string newName{};
+                           std::vector<std::string> &derived_names) {
+  std::string new_name{""};
 }
 
 static void random_encryption(const std::string &name,
-                              std::vector<std::string> &derivedNames) {
-  std::string newName{""};
+                              std::vector<std::string> &derived_names) {
+  std::string new_name{""};
   // Выбираем размер
-  size_t declSize{MIN_SIZE + rand() % (MAX_SIZE - MIN_SIZE + 1)};
-  size_t allowedSize{allowedSymbols.size()};
+  size_t decl_size{MIN_SIZE + rand() % (MAX_SIZE - MIN_SIZE + 1)};
+  size_t allowed_size{kAllowedSymbols.size()};
   // Добавляем случайный символ. Первым должна быть латинская буква в lowerCase
   /* С учетом неиспользования верхнего регистра и цифр */
-  size_t first{rand() % (allowedSize - 37)};
-  newName.push_back((char)allowedSymbols[first]);
-  for (size_t i = 0; i < declSize - 1; ++i) {
-    size_t symbol = allowedSymbols[rand() % allowedSize];
-    newName.push_back(symbol);
+  size_t first{rand() % (allowed_size - 37)};
+  new_name.push_back((char)kAllowedSymbols[first]);
+  for (size_t i = 0; i < decl_size - 1; ++i) {
+    size_t symbol = kAllowedSymbols[rand() % allowed_size];
+    new_name.push_back(symbol);
   }
   // Дополняем еще случайными символами, если такое имя уже есть
-  while (std::find(derivedNames.begin(), derivedNames.end(), newName) !=
-         derivedNames.end()) {
-    size_t extra = allowedSymbols[rand() % allowedSize];
-    newName.push_back(extra);
+  while (std::find(derived_names.begin(), derived_names.end(), new_name) !=
+         derived_names.end()) {
+    size_t extra = kAllowedSymbols[rand() % allowed_size];
+    new_name.push_back(extra);
   }
-  newName.push_back('_');
-  derivedNames.push_back(newName);
+  new_name.push_back('_');
+  derived_names.push_back(new_name);
 }
 
 std::vector<std::string>
-PRGenerator::generate(const std::vector<std::string> &prevNames,
+PRGenerator::generate(const std::vector<std::string> &prev_names,
                       const OptEncryprtion method) {
-  std::vector<std::string> newNames;
-  for (const auto &name : prevNames) {
-    std::string newName{};
+  std::vector<std::string> new_names;
+  for (const auto &name : prev_names) {
+    std::string new_name{""};
     switch (method) {
     case OptEncryprtion::MD5:
-      md5_encryption(name, newNames);
+      md5_encryption(name, new_names);
       break;
     case OptEncryprtion::PJW:
-      pjw_encryption(name, newNames);
+      pjw_encryption(name, new_names);
       break;
     case OptEncryprtion::RANDOM:
-      random_encryption(name, newNames);
+      random_encryption(name, new_names);
     }
   }
-  return std::move(newNames);
+  return new_names;
 }
